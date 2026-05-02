@@ -189,31 +189,47 @@
   <main class="wrap">
     <section class="card" aria-label="聯絡方式選單">
       <div class="avatar" id="initials">ME</div>
-      <h1 id="displayName">請叫我張小雞</h1>
+      <h1 id="displayName">你的名字</h1>
       <p class="subtitle" id="tagline">掃描 QR Code 後，請選擇你偏好的通訊軟體與我聯絡。</p>
 
       <nav class="buttons">
         <a class="btn line" id="lineLink" href="#" target="_blank" rel="noopener">
-          <span><span class="icon">自己想</span> Line</span>
+          <span><span class="icon">L</span> Line</span>
           <span>開啟 ›</span>
         </a>
         <a class="btn whatsapp" id="whatsappLink" href="#" target="_blank" rel="noopener">
-          <span><span class="icon">自己想</span> WhatsApp</span>
+          <span><span class="icon">☎</span> WhatsApp</span>
           <span>開啟 ›</span>
         </a>
         <a class="btn wechat" id="wechatLink" href="#wechat-info">
-          <span><span class="icon">自己想</span> 微信 WeChat</span>
+          <span><span class="icon">微</span> 微信 WeChat</span>
           <span>查看 ID ›</span>
         </a>
         <a class="btn kakao" id="kakaoLink" href="#" target="_blank" rel="noopener">
-          <span><span class="icon">自己想</span> KakaoTalk</span>
+          <span><span class="icon">K</span> KakaoTalk</span>
           <span>開啟 ›</span>
         </a>
       </nav>
 
+      <div id="wechat-info" class="qr-panel show">
+        <strong>微信 WeChat</strong>
+        <div style="margin-top:12px;">
+          <img src="wechat-qr.png" alt="WeChat QR Code" style="width:180px;border-radius:12px;" />
+        </div>
+        <p class="small">請長按或掃描此 QR Code 加我微信</p>
+      </div>
 
+      <button class="toggle" type="button" id="qrToggle">顯示 / 產生本頁 QR Code</button>
+
+      <div class="qr-panel" id="qrPanel">
+        <strong>名片用 QR Code</strong>
+        <div id="qrcode" aria-label="本頁 QR Code"></div>
+        <p class="small">請把下方網址換成你的正式網址後，再產生並放到名片上：</p>
+        <p class="small" id="pageUrlText"></p>
+      </div>
     </section>
 
+    <p class="footer">QR Code 掃描後會進入此頁，再讓使用者選擇 Line、WhatsApp、微信或 KakaoTalk。</p>
   </main>
 
   <script>
