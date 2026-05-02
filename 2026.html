@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>聯絡我｜QR Code 名片頁</title>
+  <meta name="description" content="掃描 QR Code 後選擇 Line、WhatsApp、微信或 KakaoTalk 聯絡方式。" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    :root {
+      --bg: #f6f7fb;
+      --card: #ffffff;
+      --text: #151922;
+      --muted: #687083;
+      --line: #06C755;
+      --whatsapp: #25D366;
+      --wechat: #07C160;
+      --kakao: #FEE500;
+      --shadow: 0 20px 50px rgba(15, 23, 42, .12);
+      --radius: 28px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", Roboto, Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 15% 15%, rgba(6,199,85,.14), transparent 28%),
+        radial-gradient(circle at 85% 20%, rgba(37,211,102,.16), transparent 26%),
+        radial-gradient(circle at 50% 90%, rgba(254,229,0,.18), transparent 28%),
+        var(--bg);
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+
+    .wrap {
+      width: min(100%, 460px);
+    }
+
+    .card {
+      background: rgba(255,255,255,.9);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255,255,255,.8);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 28px;
+      text-align: center;
+    }
+
+    .avatar {
+      width: 92px;
+      height: 92px;
+      border-radius: 999px;
+      margin: 0 auto 16px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, #111827, #374151);
+      color: white;
+      font-size: 34px;
+      font-weight: 800;
+      letter-spacing: .04em;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(28px, 7vw, 38px);
+      line-height: 1.1;
+    }
+
+    .subtitle {
+      margin: 10px 0 24px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .buttons {
+      display: grid;
+      gap: 13px;
+      margin-top: 20px;
+    }
+
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      text-decoration: none;
+      color: #fff;
+      border-radius: 18px;
+      padding: 16px 18px;
+      font-weight: 750;
+      letter-spacing: .02em;
+      transform: translateY(0);
+      transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+      box-shadow: 0 12px 24px rgba(15, 23, 42, .13);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.02);
+    }
+
+    .btn:active { transform: translateY(0); }
+
+    .btn span:first-child {
+      display: inline-flex;
+      align-items: center;
+      gap: 11px;
+    }
+
+    .icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: rgba(255,255,255,.22);
+      font-size: 18px;
+    }
+
+    .line { background: var(--line); }
+    .whatsapp { background: var(--whatsapp); }
+    .wechat { background: var(--wechat); }
+    .kakao {
+      background: var(--kakao);
+      color: #181600;
+    }
+    .kakao .icon { background: rgba(0,0,0,.08); }
+
+    .qr-panel {
+      margin-top: 18px;
+      background: #fff;
+      border: 1px solid #edf0f5;
+      border-radius: 22px;
+      padding: 18px;
+      display: none;
+    }
+
+    .qr-panel.show { display: block; }
+
+    #qrcode {
+      display: grid;
+      place-items: center;
+      margin: 12px auto;
+    }
+
+    #qrcode img,
+    #qrcode canvas {
+      width: 178px !important;
+      height: 178px !important;
+      border-radius: 10px;
+    }
+
+    .small {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+      margin: 8px 0 0;
+      overflow-wrap: anywhere;
+    }
+
+    .toggle {
+      margin-top: 22px;
+      width: 100%;
+      border: 0;
+      border-radius: 16px;
+      padding: 14px 16px;
+      background: #111827;
+      color: white;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 16px;
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="card" aria-label="聯絡方式選單">
+      <div class="avatar" id="initials">ME</div>
+      <h1 id="displayName">你的名字</h1>
+      <p class="subtitle" id="tagline">掃描 QR Code 後，請選擇你偏好的通訊軟體與我聯絡。</p>
+
+      <nav class="buttons">
+        <a class="btn line" id="lineLink" href="#" target="_blank" rel="noopener">
+          <span><span class="icon">L</span> Line</span>
+          <span>開啟 ›</span>
+        </a>
+        <a class="btn whatsapp" id="whatsappLink" href="#" target="_blank" rel="noopener">
+          <span><span class="icon">☎</span> WhatsApp</span>
+          <span>開啟 ›</span>
+        </a>
+        <a class="btn wechat" id="wechatLink" href="#wechat-info">
+          <span><span class="icon">微</span> 微信 WeChat</span>
+          <span>查看 ID ›</span>
+        </a>
+        <a class="btn kakao" id="kakaoLink" href="#" target="_blank" rel="noopener">
+          <span><span class="icon">K</span> KakaoTalk</span>
+          <span>開啟 ›</span>
+        </a>
+      </nav>
+
+      <div id="wechat-info" class="qr-panel show">
+        <strong>微信 WeChat 連結</strong>
+        <p class="small" id="wechatIdText">請將此處改成你的 WeChat ID</p>
+      </div>
+
+      <button class="toggle" type="button" id="qrToggle">顯示 / 產生本頁 QR Code</button>
+
+      <div class="qr-panel" id="qrPanel">
+        <strong>名片用 QR Code</strong>
+        <div id="qrcode" aria-label="本頁 QR Code"></div>
+        <p class="small">請把下方網址換成你的正式網址後，再產生並放到名片上：</p>
+        <p class="small" id="pageUrlText"></p>
+      </div>
+    </section>
+
+    <p class="footer">QR Code 掃描後會進入此頁，再讓使用者選擇 Line、WhatsApp、微信或 KakaoTalk。</p>
+  </main>
+
+  <script>
+    // === 請在這裡修改成你的資料 ===
+    const profile = {
+      name: "你的名字",
+      initials: "ME",
+      tagline: "掃描 QR Code 後，請選擇你偏好的通訊軟體與我聯絡。",
+
+      // 建議先將此 HTML 上傳到你的網站，再把 landingPageUrl 改成正式網址。
+      landingPageUrl: "https://your-domain.com/contact.html",
+
+      // Line：可使用 https://line.me/ti/p/~你的LineID 或官方帳號連結
+      lineUrl: "https://line.me/ti/p/8rt6wJojsL",
+
+      // WhatsApp：電話請用國碼，不要加 +、空格或破折號。例如台灣 0912-345-678 → 886912345678
+      whatsappNumber: "",
+      whatsappUrl: "https://wa.me/qr/GAUUZYA7UOUUO1",
+      whatsappMessage: "你好，我是從名片 QR Code 掃描過來的。",
+
+      // 微信通常無法直接用網頁深連結穩定開啟，建議顯示 WeChat ID 或放微信 QR 圖片。
+      wechatId: "https://u.wechat.com/kPAHjcK23B8xcjISD0T0UZI?s=2",
+
+      // KakaoTalk：請改成你的 KakaoTalk 個人或頻道連結
+      kakaoUrl: "#"
+    };
+
+    document.getElementById("displayName").textContent = profile.name;
+    document.getElementById("initials").textContent = profile.initials;
+    document.getElementById("tagline").textContent = profile.tagline;
+    document.getElementById("lineLink").href = profile.lineUrl;
+
+    const waText = encodeURIComponent(profile.whatsappMessage);
+    document.getElementById("whatsappLink").href = profile.whatsappUrl || `https://wa.me/${profile.whatsappNumber}?text=${waText}`;
+
+    document.getElementById("wechatIdText").textContent = profile.wechatId;
+    document.getElementById("kakaoLink").href = profile.kakaoUrl;
+
+    const qrUrl = profile.landingPageUrl || window.location.href;
+    document.getElementById("pageUrlText").textContent = qrUrl;
+
+    let qrCreated = false;
+    const qrPanel = document.getElementById("qrPanel");
+    document.getElementById("qrToggle").addEventListener("click", () => {
+      qrPanel.classList.toggle("show");
+      if (!qrCreated) {
+        new QRCode(document.getElementById("qrcode"), {
+          text: qrUrl,
+          width: 220,
+          height: 220,
+          correctLevel: QRCode.CorrectLevel.H
+        });
+        qrCreated = true;
+      }
+    });
+  </script>
+</body>
+</html>
